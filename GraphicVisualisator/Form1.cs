@@ -10,6 +10,7 @@ using WindowsFormsApplication10.MathAnalysis;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows.Forms.VisualStyles;
+using GraphicVisualisator;
 
 namespace WindowsFormsApplication10
 {
@@ -29,7 +30,7 @@ namespace WindowsFormsApplication10
 
         //Graphic Moves
         bool isMouseDown = false;
-        int x1, y1; // Коордиаты нажатия мыши
+        int x1, y1;
         public Form1()
         {
             InitializeComponent();
@@ -41,7 +42,7 @@ namespace WindowsFormsApplication10
         }
 
         #region Events
-        private void Wheel(object Sender, MouseEventArgs e)
+        private void Wheel(object sender, MouseEventArgs e)
         {
             if (e.Delta > 0)
             {
@@ -107,6 +108,7 @@ namespace WindowsFormsApplication10
         }
         #endregion
 
+        #region Functions
         public double CustomFunction(double x)
         {
             if (x != 0)
@@ -115,7 +117,11 @@ namespace WindowsFormsApplication10
         }
         public double Cos(double x)
         {
-            return Math.Cos(x);
+            return GraphicMath.Cos(x, 10);
+        }
+        public double Sin(double x)
+        {
+            return GraphicMath.Sin(x, 10);
         }
         public double Para1(double x)
         {
@@ -129,16 +135,25 @@ namespace WindowsFormsApplication10
         {
             return 0.01/Math.Cos(x);
         }
+        #endregion
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             graphicsManager.CreateGraphic(e.Graphics);
-            // Постройка Функций
-             graphicsManager.DrawGraphic(10, Cos, e.Graphics, 0.1); // Косинус в Декартовых координатах
-             derivative.DrawTangent((double)Tangent.Value, 30, 1, Cos, e.Graphics, 0.00001); // Касательная к косинусу в Декартовых координатах
+
+            #region Examples
+            // graphicsManager.DrawGraphic(10, Cos, e.Graphics, 0.1); // Косинус в Декартовых координатах
+            // derivative.DrawTangent((double)Tangent.Value, 30, 1, Cos, e.Graphics, 0.00001); // Касательная к косинусу в Декартовых координатах
             // DerivativeControl.Text = Derivative.TangentFormula((double)Tangent.Value, Cos, 0.00001); // Уравнение касательной к косинусу в Декартовых координатах
             // graphicsManager.DrawPolarGraphic(0, Math.PI*4, PolarFunc, e.Graphics, 0.01); // График функции в полярных координатах
             // graphicsManager.DrawParametricGraphic(0, 10, Para2, Para1, e.Graphics, 0.01);
+            #endregion
+
+            // Постройка Функций
+            graphicsManager.DrawGraphic(10, Sin, e.Graphics, 0.1);
+            
+            DerivativeControl.Text = GraphicMath.Sin(Math.PI, 10).ToString();
+
         }
 
 
