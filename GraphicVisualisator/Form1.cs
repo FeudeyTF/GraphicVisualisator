@@ -11,6 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows.Forms.VisualStyles;
 using GraphicVisualisator;
+using NReco.Linq;
 
 namespace WindowsFormsApplication10
 {
@@ -21,16 +22,17 @@ namespace WindowsFormsApplication10
             get
             {
                 CreateParams handleParam = base.CreateParams;
-                handleParam.ExStyle |= 0x02000000;      
+                handleParam.ExStyle |= 0x02000000;
                 return handleParam;
             }
         }
         GraphicManager graphicsManager;
         Derivative derivative;
-
+        Parser parser = new Parser();
         //Graphic Moves
         bool isMouseDown = false;
         int x1, y1;
+
         public Form1()
         {
             InitializeComponent();
@@ -111,17 +113,19 @@ namespace WindowsFormsApplication10
         #region Functions
         public double CustomFunction(double x)
         {
-            if (x != 0)
-                return Math.Ceiling(1/x);
-            else return 0;
+            return Math.Log2(4 * x - x * x - 2);
+        }
+        public double CustomFunction2(double x)
+        {
+            return Math.Pow(5, Math.Abs(x - 2));
         }
         public double Cos(double x)
         {
-            return GraphicMath.Cos(x, 10);
+            return GraphicMath.Cos(x);
         }
         public double Sin(double x)
         {
-            return GraphicMath.Sin(x, 10);
+            return GraphicMath.Sin(x);
         }
         public double Para1(double x)
         {
@@ -133,9 +137,10 @@ namespace WindowsFormsApplication10
         }
         public double PolarFunc(double x)
         {
-            return 0.01/Math.Cos(x);
+            return Math.Exp(x);
         }
         #endregion
+
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -150,12 +155,23 @@ namespace WindowsFormsApplication10
             #endregion
 
             // Постройка Функций
-            graphicsManager.DrawGraphic(10, Sin, e.Graphics, 0.1);
-            
-            DerivativeControl.Text = GraphicMath.Sin(Math.PI, 10).ToString();
+            // graphicsManager.DrawGraphic(10, CustomFunction, e.Graphics, 0.1);
+            // graphicsManager.DrawGraphic(10, CustomFunction2, e.Graphics, 0.1);
+            // derivative.DrawTangent((double)Tangent.Value, 30, 1, CustomFunction, e.Graphics, 0.00001); // Касательная к косинусу в Декартовых координатах
+            string expr = "cos(10)";
+            //graphicsManager.DrawExpressionGraphic(10, expression, e.Graphics, 0.1);
+            StringBuilder str = new StringBuilder();
+            for (int j = 0; j < expr.Length; j++)
+            {
+                if (expr[j] == 'x')
+                {
+                    str.Append(10);
+                    continue;
+                }
+                str.Append(expr[j]);
+            }
+            DerivativeControl.Text = parser.Parse(str.ToString()).ToString();
 
         }
-
-
     }
 }

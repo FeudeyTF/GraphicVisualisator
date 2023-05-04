@@ -32,3 +32,5 @@ C:\VS\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\refint\Gr
 C:\VS\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\GraphicVisualisator.pdb
 C:\VS\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\GraphicVisualisator.genruntimeconfig.cache
 C:\VS\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\ref\GraphicVisualisator.dll
+C:\VS\GraphicVisualisator\GraphicVisualisator\bin\Debug\net6.0-windows\NReco.LambdaParser.dll
+C:\VS\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\GraphicVisualisator.csproj.CopyComplete

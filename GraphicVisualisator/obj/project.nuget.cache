@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "o7Oa0gWSllGE8NpnOpnZr8dAFDxQpBVLcSzIUzkU5iznLOmAsZcXoNAwbv0iWMctnmO/lvJ8A4Vf7cq1DBR7Vw==",
+  "dgSpecHash": "stU/fVprVwCPg7htDk7972RCKPwXVa7UwdAZKXeOR6YkcQa6CMfyfzAYspviHq1MdT0FZLo4Y6JXqGooT3yumw==",
   "success": true,
   "projectFilePath": "C:\\VS\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\yan\\.nuget\\packages\\nreco.lambdaparser\\1.0.12\\nreco.lambdaparser.1.0.12.nupkg.sha512"
+  ],
   "logs": []
 }

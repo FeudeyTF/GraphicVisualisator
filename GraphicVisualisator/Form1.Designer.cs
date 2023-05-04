@@ -51,9 +51,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(114, 11);
+            this.panel1.Location = new System.Drawing.Point(133, 13);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(864, 599);
+            this.panel1.Size = new System.Drawing.Size(1008, 691);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
@@ -63,23 +64,25 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 11);
+            this.label1.Location = new System.Drawing.Point(9, 13);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 13);
+            this.label1.Size = new System.Drawing.Size(96, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "По горизонтали";
             // 
             // numericUpDownH
             // 
             this.numericUpDownH.DecimalPlaces = 1;
-            this.numericUpDownH.Location = new System.Drawing.Point(11, 27);
+            this.numericUpDownH.Location = new System.Drawing.Point(13, 31);
+            this.numericUpDownH.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.numericUpDownH.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.numericUpDownH.Name = "numericUpDownH";
-            this.numericUpDownH.Size = new System.Drawing.Size(97, 20);
+            this.numericUpDownH.Size = new System.Drawing.Size(113, 23);
             this.numericUpDownH.TabIndex = 2;
             this.numericUpDownH.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDownH.Value = new decimal(new int[] {
@@ -92,23 +95,25 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 50);
+            this.label2.Location = new System.Drawing.Point(9, 58);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 13);
+            this.label2.Size = new System.Drawing.Size(83, 15);
             this.label2.TabIndex = 1;
             this.label2.Text = "По вертикали";
             // 
             // numericUpDownV
             // 
             this.numericUpDownV.DecimalPlaces = 1;
-            this.numericUpDownV.Location = new System.Drawing.Point(11, 66);
+            this.numericUpDownV.Location = new System.Drawing.Point(13, 76);
+            this.numericUpDownV.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.numericUpDownV.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.numericUpDownV.Name = "numericUpDownV";
-            this.numericUpDownV.Size = new System.Drawing.Size(97, 20);
+            this.numericUpDownV.Size = new System.Drawing.Size(113, 23);
             this.numericUpDownV.TabIndex = 2;
             this.numericUpDownV.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDownV.Value = new decimal(new int[] {
@@ -121,9 +126,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 89);
+            this.label3.Location = new System.Drawing.Point(9, 103);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(82, 13);
+            this.label3.Size = new System.Drawing.Size(86, 15);
             this.label3.TabIndex = 1;
             this.label3.Text = "X касательной";
             // 
@@ -135,14 +141,15 @@
             0,
             0,
             65536});
-            this.Tangent.Location = new System.Drawing.Point(11, 105);
+            this.Tangent.Location = new System.Drawing.Point(13, 121);
+            this.Tangent.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Tangent.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
             this.Tangent.Name = "Tangent";
-            this.Tangent.Size = new System.Drawing.Size(97, 20);
+            this.Tangent.Size = new System.Drawing.Size(113, 23);
             this.Tangent.TabIndex = 2;
             this.Tangent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.Tangent.Value = new decimal(new int[] {
@@ -158,9 +165,10 @@
             // 
             // TimerButton
             // 
-            this.TimerButton.Location = new System.Drawing.Point(12, 131);
+            this.TimerButton.Location = new System.Drawing.Point(14, 151);
+            this.TimerButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TimerButton.Name = "TimerButton";
-            this.TimerButton.Size = new System.Drawing.Size(96, 23);
+            this.TimerButton.Size = new System.Drawing.Size(112, 27);
             this.TimerButton.TabIndex = 3;
             this.TimerButton.Text = "Start";
             this.TimerButton.UseVisualStyleBackColor = true;
@@ -169,17 +177,18 @@
             // DerivativeControl
             // 
             this.DerivativeControl.AutoSize = true;
-            this.DerivativeControl.Location = new System.Drawing.Point(13, 161);
+            this.DerivativeControl.Location = new System.Drawing.Point(15, 186);
+            this.DerivativeControl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.DerivativeControl.Name = "DerivativeControl";
-            this.DerivativeControl.Size = new System.Drawing.Size(55, 13);
+            this.DerivativeControl.Size = new System.Drawing.Size(59, 15);
             this.DerivativeControl.TabIndex = 4;
             this.DerivativeControl.Text = "Derivative";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(996, 623);
+            this.ClientSize = new System.Drawing.Size(1162, 719);
             this.Controls.Add(this.DerivativeControl);
             this.Controls.Add(this.TimerButton);
             this.Controls.Add(this.Tangent);
@@ -189,6 +198,7 @@
             this.Controls.Add(this.numericUpDownH);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Form1";
             this.Text = "График";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownH)).EndInit();

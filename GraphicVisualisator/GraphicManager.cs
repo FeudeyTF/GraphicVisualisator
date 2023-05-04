@@ -1,5 +1,8 @@
-﻿using System;
+﻿using GraphicVisualisator;
+using NReco.Linq;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -21,6 +24,8 @@ namespace WindowsFormsApplication10.MathAnalysis
         public delegate double Function(double x);
         public delegate double PolarFunction(double x);
         public delegate double ParametricFunction(double x);
+
+
         public GraphicManager(Pen graphicPen, Brush graphicBrush, double HS, double VS, int Height, int Width)
         {
             GraphicPen = graphicPen;
@@ -28,8 +33,7 @@ namespace WindowsFormsApplication10.MathAnalysis
             this.HS = HS; this.VS = VS;
             this.cx = Width / 2; this.cy = Height / 2;
             this.Height = Height; this.Width = Width;
-            
-
+           
 
         }
         public void CreateGraphic(Graphics graphics)
@@ -105,6 +109,33 @@ namespace WindowsFormsApplication10.MathAnalysis
             catch(Exception e)
             {
                 MessageBox.Show(e.Message);
+            }
+
+        }
+        public void DrawExpressionGraphic(int  num, string expr, Graphics g, double step)
+        {
+
+            Parser parser = new Parser();
+
+            try
+            {
+                for (double i = -num; i < num; i += step)
+                {
+                    StringBuilder str = new StringBuilder();
+                    for(int j = 0; j < expr.Length; j++)
+                    {
+                        if (expr[j]=='x')
+                        {
+                            str.Append(i);
+                            continue;
+                        }
+                        str.Append(expr[j]);
+                    }
+                    g.DrawLine(GraphicPen, (float)(i * hs), -(float)(double.Parse(parser.Parse(str.ToString()).ToString()) * vs), (float)((i + step) * hs), -(float)(double.Parse(parser.Parse(str.ToString()).ToString()) * vs));
+                }
+            }
+            catch (Exception e)
+            {
             }
 
         }
