@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Windows.Forms;
-using WindowsFormsApplication10.MathAnalysis;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Windows.Forms.VisualStyles;
+﻿using WindowsFormsApplication10.MathAnalysis;
 using GraphicVisualisator;
-using NReco.Linq;
 
 namespace WindowsFormsApplication10
 {
@@ -28,11 +16,10 @@ namespace WindowsFormsApplication10
         }
         GraphicManager graphicsManager;
         Derivative derivative;
-        Parser parser = new Parser();
         //Graphic Moves
         bool isMouseDown = false;
         int x1, y1;
-
+        string expr = "1+x";
         public Form1()
         {
             InitializeComponent();
@@ -113,11 +100,11 @@ namespace WindowsFormsApplication10
         #region Functions
         public double CustomFunction(double x)
         {
-            return Math.Log2(4 * x - x * x - 2);
+            return Math.Log10(Math.Exp(x / 9 + x));
         }
         public double CustomFunction2(double x)
         {
-            return Math.Pow(5, Math.Abs(x - 2));
+            return Math.Exp(1 / x);
         }
         public double Cos(double x)
         {
@@ -142,6 +129,12 @@ namespace WindowsFormsApplication10
         #endregion
 
 
+        private void ExpressionBox_TextChanged(object sender, EventArgs e)
+        {
+            expr = ExpressionBox.Text;
+            panel1.Invalidate();
+        }
+
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             graphicsManager.CreateGraphic(e.Graphics);
@@ -158,19 +151,18 @@ namespace WindowsFormsApplication10
             // graphicsManager.DrawGraphic(10, CustomFunction, e.Graphics, 0.1);
             // graphicsManager.DrawGraphic(10, CustomFunction2, e.Graphics, 0.1);
             // derivative.DrawTangent((double)Tangent.Value, 30, 1, CustomFunction, e.Graphics, 0.00001); // Касательная к косинусу в Декартовых координатах
-            string expr = "cos(10)";
-            //graphicsManager.DrawExpressionGraphic(10, expression, e.Graphics, 0.1);
-            StringBuilder str = new StringBuilder();
-            for (int j = 0; j < expr.Length; j++)
+            // graphicsManager.DrawExpressionGraphic(10, expression, e.Graphics, 0.1);
+            try
             {
-                if (expr[j] == 'x')
+                if (expr != "")
                 {
-                    str.Append(10);
-                    continue;
+                    graphicsManager.DrawGraphic(10, Math.Sin, e.Graphics, 0.03);
                 }
-                str.Append(expr[j]);
             }
-            DerivativeControl.Text = parser.Parse(str.ToString()).ToString();
+            catch (Exception ex) 
+            {
+                
+            }
 
         }
     }

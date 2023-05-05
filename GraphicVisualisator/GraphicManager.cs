@@ -95,6 +95,7 @@ namespace WindowsFormsApplication10.MathAnalysis
             double minStep = step / 10;
             try
             {
+
                 for (double i = -num; i < num; i += step)
                 {
                     if (Math.Abs(Derivative.FindTangent(i, i, f1, 0.000001)) > 20)
@@ -114,9 +115,6 @@ namespace WindowsFormsApplication10.MathAnalysis
         }
         public void DrawExpressionGraphic(int  num, string expr, Graphics g, double step)
         {
-
-            Parser parser = new Parser();
-
             try
             {
                 for (double i = -num; i < num; i += step)
@@ -131,7 +129,7 @@ namespace WindowsFormsApplication10.MathAnalysis
                         }
                         str.Append(expr[j]);
                     }
-                    g.DrawLine(GraphicPen, (float)(i * hs), -(float)(double.Parse(parser.Parse(str.ToString()).ToString()) * vs), (float)((i + step) * hs), -(float)(double.Parse(parser.Parse(str.ToString()).ToString()) * vs));
+                    g.DrawLine(GraphicPen, (float)(i * hs), -(float)(double.Parse(Parser.Parse(str.ToString()).ToString()) * vs), (float)((i + step) * hs), -(float)(double.Parse(Parser.Parse(str.ToString()).ToString()) * vs));
                 }
             }
             catch (Exception e)

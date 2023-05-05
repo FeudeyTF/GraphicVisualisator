@@ -87,17 +87,25 @@ namespace GraphicVisualisator
     }
     public class Parser
     {
-        public Dictionary<string, int> Operands = new Dictionary<string, int>();
-        public Parser()
+
+        public static string[] PrefixFunctions = { "cos", "sin" };
+        public static int GetPriority(string c)
         {
-            Operands.Add("(", 1);
-            Operands.Add(")", 2);
-            Operands.Add("-", 2);
-            Operands.Add("+", 2);
-            Operands.Add("*", 3);
-            Operands.Add("/", 3);
-            Operands.Add("cos", 2);
-            Operands.Add("sin", 2);
+            switch (c)
+            {
+                case "^":
+                    return 1;
+                case "*":
+                case "/":
+                    return 2;
+                case "+":
+                case "-":
+                    return 3;
+                case "(":
+                case ")":
+                    return 4;
+                default: return 0;
+            }
         }
         public static string ExprBuilder(string expr)
         {
@@ -110,7 +118,7 @@ namespace GraphicVisualisator
                 {
                     if (i > 0)
                     {
-                        if (expr[i - 1] != ' ' && expr[i] != '(')
+                        if (expr[i - 1] != ' ' && result.ToString()[i - 1] != ' ')
                         {
                             result.Append(' ');
                         }
@@ -128,20 +136,21 @@ namespace GraphicVisualisator
 
             return result.ToString();
         }
-        public string Translate(string expr)
+        public static string Translate(string expr)
         {
             string[] splitedString = ExprBuilder(expr).Split();
             StringStack ss = new StringStack(100);
             string result = "";
             foreach (string s in splitedString)
             {
-                if (!Operands.TryGetValue(s, out _))
+                if (double.TryParse(s, out _))
                     result += s + " ";
                 else
                 {
-                    if (ss.Number == 0 || Operands[ss.Peek()] < Operands[s] || s == "(")
+                    if (PrefixFunctions.Contains(s) || s == "(" || ss.Number == 0)
                     {
                         ss.Push(s);
+                        continue;
                     }
                     if (s == ")")
                     {
@@ -150,6 +159,16 @@ namespace GraphicVisualisator
                             result += ss.Pop() + " ";
                         }
                         ss.Pop();
+                        continue;
+                    }
+                    if (GetPriority(s) != 0)
+                    {
+                        while (PrefixFunctions.Contains(ss.Peek()) || GetPriority(ss.Peek()) < GetPriority(s))
+                        {
+                            result += s + " ";
+                            ss.Pop();
+                        }
+                        ss.Push(s);
                     }
 
                 }
@@ -159,7 +178,7 @@ namespace GraphicVisualisator
 
             return result.Trim();
         }
-        public double Parse(string expr)
+        public static double Parse(string expr)
         {
             string[] splitExpr = Translate(expr).Split(' ');
             DoubleStack St = new DoubleStack(expr.Length);
@@ -199,5 +218,6 @@ namespace GraphicVisualisator
         }
     }
 }
+
 
 

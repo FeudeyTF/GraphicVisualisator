@@ -39,6 +39,7 @@
             this.DerivativeTimer = new System.Windows.Forms.Timer(this.components);
             this.TimerButton = new System.Windows.Forms.Button();
             this.DerivativeControl = new System.Windows.Forms.Label();
+            this.ExpressionBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tangent)).BeginInit();
@@ -184,11 +185,21 @@
             this.DerivativeControl.TabIndex = 4;
             this.DerivativeControl.Text = "Derivative";
             // 
+            // ExpressionBox
+            // 
+            this.ExpressionBox.Location = new System.Drawing.Point(15, 204);
+            this.ExpressionBox.Name = "ExpressionBox";
+            this.ExpressionBox.Size = new System.Drawing.Size(100, 23);
+            this.ExpressionBox.TabIndex = 5;
+            this.ExpressionBox.Tag = "";
+            this.ExpressionBox.TextChanged += new System.EventHandler(this.ExpressionBox_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1162, 719);
+            this.Controls.Add(this.ExpressionBox);
             this.Controls.Add(this.DerivativeControl);
             this.Controls.Add(this.TimerButton);
             this.Controls.Add(this.Tangent);
@@ -221,6 +232,7 @@
         private System.Windows.Forms.Timer DerivativeTimer;
         private System.Windows.Forms.Button TimerButton;
         private System.Windows.Forms.Label DerivativeControl;
+        private TextBox ExpressionBox;
     }
 }
 
