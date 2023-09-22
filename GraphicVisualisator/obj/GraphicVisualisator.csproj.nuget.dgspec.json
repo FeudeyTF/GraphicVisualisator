@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\VS\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj": {}
+    "C:\\VS\\Mordanenko\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj": {}
   },
   "projects": {
-    "C:\\VS\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj": {
+    "C:\\VS\\Mordanenko\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\VS\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj",
+        "projectUniqueName": "C:\\VS\\Mordanenko\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj",
         "projectName": "GraphicVisualisator",
-        "projectPath": "C:\\VS\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj",
+        "projectPath": "C:\\VS\\Mordanenko\\GraphicVisualisator\\GraphicVisualisator\\GraphicVisualisator.csproj",
         "packagesPath": "C:\\Users\\yan\\.nuget\\packages\\",
-        "outputPath": "C:\\VS\\GraphicVisualisator\\GraphicVisualisator\\obj\\",
+        "outputPath": "C:\\VS\\Mordanenko\\GraphicVisualisator\\GraphicVisualisator\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

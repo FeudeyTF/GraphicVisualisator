@@ -19,7 +19,7 @@ namespace WindowsFormsApplication10
         //Graphic Moves
         bool isMouseDown = false;
         int x1, y1;
-        string expr = "1+x";
+        string expr = "";
         public Form1()
         {
             InitializeComponent();
@@ -104,7 +104,7 @@ namespace WindowsFormsApplication10
         }
         public double CustomFunction2(double x)
         {
-            return Math.Exp(1 / x);
+            return x*x;
         }
         public double Cos(double x)
         {
@@ -112,7 +112,7 @@ namespace WindowsFormsApplication10
         }
         public double Sin(double x)
         {
-            return GraphicMath.Sin(x);
+            return 0.5*x-GraphicMath.Sin(x);
         }
         public double Para1(double x)
         {
@@ -124,7 +124,7 @@ namespace WindowsFormsApplication10
         }
         public double PolarFunc(double x)
         {
-            return Math.Exp(x);
+            return 10/Math.Cos(10+x);
         }
         #endregion
 
@@ -152,18 +152,10 @@ namespace WindowsFormsApplication10
             // graphicsManager.DrawGraphic(10, CustomFunction2, e.Graphics, 0.1);
             // derivative.DrawTangent((double)Tangent.Value, 30, 1, CustomFunction, e.Graphics, 0.00001); // Касательная к косинусу в Декартовых координатах
             // graphicsManager.DrawExpressionGraphic(10, expression, e.Graphics, 0.1);
-            try
-            {
-                if (expr != "")
-                {
-                    graphicsManager.DrawGraphic(10, Math.Sin, e.Graphics, 0.03);
-                }
-            }
-            catch (Exception ex) 
-            {
-                
-            }
 
+             //graphicsManager.DrawPolarGraphic(0, Math.PI*4, PolarFunc, e.Graphics, 0.01); // График функции в полярных координатах
+            graphicsManager.DrawGraphic(10, GraphicMath.Cos, e.Graphics, 0.1);
+            derivative.DrawTangent((double)Tangent.Value, 30, 1, Math.Exp, e.Graphics, 0.00001);
         }
     }
 }

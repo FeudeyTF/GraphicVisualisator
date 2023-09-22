@@ -117,6 +117,9 @@ namespace WindowsFormsApplication10.MathAnalysis
         {
             try
             {
+                bool first = true;
+                int a1 = 0, b1 = 0;
+                int a = 0, b = 0;
                 for (double i = -num; i < num; i += step)
                 {
                     StringBuilder str = new StringBuilder();
@@ -129,7 +132,15 @@ namespace WindowsFormsApplication10.MathAnalysis
                         }
                         str.Append(expr[j]);
                     }
-                    g.DrawLine(GraphicPen, (float)(i * hs), -(float)(double.Parse(Parser.Parse(str.ToString()).ToString()) * vs), (float)((i + step) * hs), -(float)(double.Parse(Parser.Parse(str.ToString()).ToString()) * vs));
+                    Scale(i, Parser.Parse(str.ToString()), out a1, out b1);
+                    if (first)
+                    {
+                        a = a1; b = b1;
+                        first = false;
+                        continue;
+                    }
+                        g.DrawLine(GraphicPen, a, b, a1, b1);
+                    a = a1; b = b1;
                 }
             }
             catch (Exception e)

@@ -85,6 +85,7 @@ namespace GraphicVisualisator
         }
 
     }
+
     public class Parser
     {
 
@@ -124,7 +125,7 @@ namespace GraphicVisualisator
                         }
                         result.Append(expr[i]);
                         if (i + 1 < expr.Length)
-                            if (expr[i + 1] != ' ')
+                            if (expr[i + 1] != ' ' && !symb.Contains(expr[i - 1].ToString()))
                             {
                                 result.Append(' ');
                             }

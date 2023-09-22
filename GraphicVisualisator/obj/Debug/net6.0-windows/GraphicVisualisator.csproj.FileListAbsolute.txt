@@ -34,3 +34,5 @@ C:\VS\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\GraphicVi
 C:\VS\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\ref\GraphicVisualisator.dll
 C:\VS\GraphicVisualisator\GraphicVisualisator\bin\Debug\net6.0-windows\NReco.LambdaParser.dll
 C:\VS\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\GraphicVisualisator.csproj.CopyComplete
+C:\VS\Mordanenko\GraphicVisualisator\GraphicVisualisator\bin\Debug\net6.0-windows\NReco.LambdaParser.dll
+C:\VS\Mordanenko\GraphicVisualisator\GraphicVisualisator\obj\Debug\net6.0-windows\GraphicVisualisator.csproj.CopyComplete
