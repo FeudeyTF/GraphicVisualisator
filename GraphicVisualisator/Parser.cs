@@ -1,95 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace GraphicVisualisator
 {
-    class DoubleStack
+    public class Stack<TValue>
     {
-        double[] dat;
-        int sp = 0;
+        private TValue[] StackArray;
 
-        public DoubleStack(int n)
+        private int Pointer = 0;
+
+        public Stack(int n)
         {
-            dat = new double[n];
+            StackArray = new TValue[n];
         }
 
-        public bool Push(double x)
+        public bool Push(TValue value)
         {
-            if (sp < dat.Length)
+            if (Pointer < StackArray.Length)
             {
-                dat[sp++] = x;
+                StackArray[Pointer++] = value;
                 return true;
             }
             else
                 return false;
         }
 
-        public double Peek()
+        public TValue Peek()
         {
-            if (sp > 0) return dat[sp - 1];
-            else return 0;
-        }
-
-        public double Pop()
-        {
-            if (sp > 0) return dat[--sp];
-            else return 0;
-        }
-
-        public int Number
-        {
-            get { return sp; }
-        }
-
-    }
-    class StringStack
-    {
-        string[] dat;
-        int sp = 0;
-
-        public StringStack(int n)
-        {
-            dat = new string[n];
-        }
-
-        public bool Push(string x)
-        {
-            if (sp < dat.Length)
-            {
-                dat[sp++] = x;
-                return true;
-            }
+            if (Pointer > 0)
+                return StackArray[Pointer - 1];
             else
-                return false;
+                return default;
         }
 
-        public string Peek()
+        public TValue Pop()
         {
-            if (sp > 0) return dat[sp - 1];
-            else return "";
+            if (Pointer > 0)
+                return StackArray[--Pointer];
+            else 
+                return default;
         }
 
-        public string Pop()
-        {
-            if (sp > 0) return dat[--sp];
-            else return "";
-        }
         public int Number
         {
-            get { return sp; }
+            get { return Pointer; }
         }
-
     }
+   
 
     public class Parser
     {
-
         public static string[] PrefixFunctions = { "cos", "sin" };
+
         public static int GetPriority(string c)
         {
             switch (c)
@@ -108,6 +69,7 @@ namespace GraphicVisualisator
                 default: return 0;
             }
         }
+
         public static string ExprBuilder(string expr)
         {
             string[] symb = { "+", "-", "*", "/", "(", ")" };
@@ -137,10 +99,11 @@ namespace GraphicVisualisator
 
             return result.ToString();
         }
+
         public static string Translate(string expr)
         {
             string[] splitedString = ExprBuilder(expr).Split();
-            StringStack ss = new StringStack(100);
+            Stack<string> stringStack = new Stack<string>(100);
             string result = "";
             foreach (string s in splitedString)
             {
@@ -148,74 +111,75 @@ namespace GraphicVisualisator
                     result += s + " ";
                 else
                 {
-                    if (PrefixFunctions.Contains(s) || s == "(" || ss.Number == 0)
+                    if (PrefixFunctions.Contains(s) || s == "(" || stringStack.Number == 0)
                     {
-                        ss.Push(s);
+                        stringStack.Push(s);
                         continue;
                     }
                     if (s == ")")
                     {
-                        while (ss.Peek() != "(")
+                        while (stringStack.Peek() != "(")
                         {
-                            result += ss.Pop() + " ";
+                            result += stringStack.Pop() + " ";
                         }
-                        ss.Pop();
+                        stringStack.Pop();
                         continue;
                     }
                     if (GetPriority(s) != 0)
                     {
-                        while (PrefixFunctions.Contains(ss.Peek()) || GetPriority(ss.Peek()) < GetPriority(s))
+                        while (PrefixFunctions.Contains(stringStack.Peek()) || GetPriority(stringStack.Peek()) < GetPriority(s))
                         {
                             result += s + " ";
-                            ss.Pop();
+                            stringStack.Pop();
                         }
-                        ss.Push(s);
+                        stringStack.Push(s);
                     }
 
                 }
             }
-            while (ss.Number != 0)
-                result += ss.Pop() + " ";
+            while (stringStack.Number != 0)
+                result += stringStack.Pop() + " ";
 
             return result.Trim();
         }
+        
         public static double Parse(string expr)
         {
             string[] splitExpr = Translate(expr).Split(' ');
-            DoubleStack St = new DoubleStack(expr.Length);
+            Stack<double> doubleStack = new Stack<double>(expr.Length);
             double x;
             foreach (string s in splitExpr)
             {
                 if (double.TryParse(s, out x))
                 {
-                    St.Push(x);
+                    doubleStack.Push(x);
                 }
                 else
                 {
                     switch (s)
                     {
                         case "+":
-                            St.Push(St.Pop() + St.Pop());
+                            doubleStack.Push(doubleStack.Pop() + doubleStack.Pop());
                             break;
                         case "-":
-                            St.Push(-St.Pop() + St.Pop());
+                            doubleStack.Push(-doubleStack.Pop() + doubleStack.Pop());
                             break;
                         case "/":
-                            St.Push(1 / St.Pop() * St.Pop());
+                            doubleStack.Push(1 / doubleStack.Pop() * doubleStack.Pop());
                             break;
                         case "*":
-                            St.Push(St.Pop() * St.Pop());
+                            doubleStack.Push(doubleStack.Pop() * doubleStack.Pop());
                             break;
                         case "cos":
-                            St.Push(Math.Cos(St.Pop()));
+                            doubleStack.Push(Math.Cos(doubleStack.Pop()));
                             break;
                         case "sin":
-                            St.Push(Math.Sin(St.Pop()));
+                            doubleStack.Push(Math.Sin(doubleStack.Pop()));
                             break;
                     }
                 }
             }
-            return St.Peek();
+            return doubleStack.Peek();
         }
     }
 }

@@ -14,19 +14,25 @@ namespace WindowsFormsApplication10
                 return handleParam;
             }
         }
-        GraphicManager graphicsManager;
-        Derivative derivative;
+
+        private GraphicManager graphicsManager;
+
+        private Derivative derivative;
+
         //Graphic Moves
-        bool isMouseDown = false;
-        int x1, y1;
-        string expr = "";
+        private bool isMouseDown = false;
+
+        private int x1, y1;
+
+        private string expr = "";
+
         public Form1()
         {
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
             graphicsManager = new GraphicManager(new Pen(Color.Red, 3), Brushes.Black, 10, 10, panel1.Height, panel1.Width);
             graphicsManager.Resize(panel1.Width, panel1.Height);
-            derivative = new Derivative(graphicsManager, new Pen(Color.Green, 2));
+            derivative = new Derivative(graphicsManager);
             this.MouseWheel += new MouseEventHandler(Wheel);
         }
 
@@ -47,12 +53,14 @@ namespace WindowsFormsApplication10
 
             }
         }
+
         private void panel1_MouseUp(object sender, MouseEventArgs e)
         {
             isMouseDown = false;
             Cursor = Cursors.Default;
             panel1.Invalidate();
         }
+
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
             isMouseDown = true;
@@ -64,6 +72,7 @@ namespace WindowsFormsApplication10
                 Cursor = Cursors.SizeAll;
             }
         }
+
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
             if (isMouseDown)
@@ -73,7 +82,6 @@ namespace WindowsFormsApplication10
                 x1 = e.X;
                 y1 = e.Y;
             }
-
         }
 
         private void numericUpDownH_ValueChanged(object sender, EventArgs e)
@@ -82,52 +90,41 @@ namespace WindowsFormsApplication10
             graphicsManager.Resize(panel1.Width, panel1.Height);
             panel1.Invalidate();
         }
+
         private void Tangent_ValueChanged(object sender, EventArgs e)
         {
             panel1.Invalidate();
         }
+
         private void TimerButton_Click(object sender, EventArgs e)
         {
             DerivativeTimer.Enabled = !DerivativeTimer.Enabled;
-
         }
+
         private void DerivativeTimer_Tick(object sender, EventArgs e)
         {
             Tangent.Value -= (decimal)0.1;
         }
+
         #endregion
 
         #region Functions
-        public double CustomFunction(double x)
-        {
-            return Math.Log10(Math.Exp(x / 9 + x));
-        }
-        public double CustomFunction2(double x)
-        {
-            return x*x;
-        }
-        public double Cos(double x)
-        {
-            return GraphicMath.Cos(x);
-        }
-        public double Sin(double x)
-        {
-            return 0.5*x-GraphicMath.Sin(x);
-        }
-        public double Para1(double x)
-        {
-            return 13 * Math.Cos(x) - 3 * Math.Cos(13 / 3 * x);
-        }
-        public double Para2(double x)
-        {
-            return 13 * Math.Sin(x) - 3 * Math.Sin(13 / 3 * x);
-        }
-        public double PolarFunc(double x)
-        {
-            return 10/Math.Cos(10+x);
-        }
-        #endregion
+        public double CustomFunction(double x) => Math.Log10(Math.Exp(x / 9 + x));
 
+
+        public double CustomFunction2(double x) => x * x;
+
+        public double Cos(double x) => GraphicMath.Cos(x);
+
+        public double Sin(double x) => 0.5 * x - GraphicMath.Sin(x);
+
+        public double Para1(double x) => 13 * Math.Cos(x) - 3 * Math.Cos(13 / 3 * x);
+
+        public double Para2(double x) => 13 * Math.Sin(x) - 3 * Math.Sin(13 / 3 * x);
+
+        public double PolarFunc(double x) => 10 / Math.Cos(10 + x);
+
+        #endregion
 
         private void ExpressionBox_TextChanged(object sender, EventArgs e)
         {
@@ -153,7 +150,7 @@ namespace WindowsFormsApplication10
             // derivative.DrawTangent((double)Tangent.Value, 30, 1, CustomFunction, e.Graphics, 0.00001); // Касательная к косинусу в Декартовых координатах
             // graphicsManager.DrawExpressionGraphic(10, expression, e.Graphics, 0.1);
 
-             //graphicsManager.DrawPolarGraphic(0, Math.PI*4, PolarFunc, e.Graphics, 0.01); // График функции в полярных координатах
+            //graphicsManager.DrawPolarGraphic(0, Math.PI*4, PolarFunc, e.Graphics, 0.01); // График функции в полярных координатах
             graphicsManager.DrawGraphic(10, GraphicMath.Cos, e.Graphics, 0.1);
             derivative.DrawTangent((double)Tangent.Value, 30, 1, Math.Exp, e.Graphics, 0.00001);
         }

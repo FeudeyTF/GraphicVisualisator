@@ -1,28 +1,26 @@
 ﻿using GraphicVisualisator;
-using NReco.Linq;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Windows.Forms;
-using static WindowsFormsApplication10.Form1;
 
 namespace WindowsFormsApplication10.MathAnalysis
 {
     public class GraphicManager
     {
         public Pen GraphicPen { get; }
+
         public Brush GraphicBrush { get; }
-        double Height, Width;
-        double HS, VS; 
+
+        private double Height, Width;
+
+        private double HS, VS; 
+
         public double hs, vs;
-        int cx, cy;
+
+        private int cx, cy;
+
         public delegate double Function(double x);
+
         public delegate double PolarFunction(double x);
+
         public delegate double ParametricFunction(double x);
 
 
@@ -36,6 +34,7 @@ namespace WindowsFormsApplication10.MathAnalysis
            
 
         }
+
         public void CreateGraphic(Graphics graphics)
         {
             // Рисуем оси координат
@@ -90,7 +89,8 @@ namespace WindowsFormsApplication10.MathAnalysis
             }
 
         }
-        public void DrawGraphic(int num, Function f1, Graphics g, double step)
+
+        public void DrawGraphic(int num, Function f1, Graphics graphics, double step)
         {
             double minStep = step / 10;
             try
@@ -103,7 +103,7 @@ namespace WindowsFormsApplication10.MathAnalysis
                     if (Math.Abs(Derivative.FindTangent(i, i, f1, 0.000001)) < 10)
                         step = minStep * 10;
                     if (Math.Abs(Derivative.FindTangentX(i, f1, 0.000001)) < 100 && f1(i) != 0)
-                        g.DrawLine(GraphicPen, (float)(i * hs), -(float)(f1(i) * vs), (float)((i + step) * hs), -(float)(f1(i + step) * vs));
+                        graphics.DrawLine(GraphicPen, (float)(i * hs), -(float)(f1(i) * vs), (float)((i + step) * hs), -(float)(f1(i + step) * vs));
                     
                 }
             }
@@ -113,6 +113,7 @@ namespace WindowsFormsApplication10.MathAnalysis
             }
 
         }
+
         public void DrawExpressionGraphic(int  num, string expr, Graphics g, double step)
         {
             try
@@ -148,6 +149,7 @@ namespace WindowsFormsApplication10.MathAnalysis
             }
 
         }
+
         public void DrawPolarGraphic(double start, double end, PolarFunction f1, Graphics g, double step)
         {
             try
@@ -178,6 +180,7 @@ namespace WindowsFormsApplication10.MathAnalysis
             }
 
         }
+
         public void DrawParametricGraphic(double start, double end, ParametricFunction f1, ParametricFunction f2, Graphics g, double step)
         {
             try
@@ -204,21 +207,25 @@ namespace WindowsFormsApplication10.MathAnalysis
             }
 
         }
+
         private void Scale(double x, double y, out int w, out int h)
         {
             w = (int)Math.Round(x * hs);
             h = -(int)Math.Round(y * vs);
         }
+
         public void Resize(int hs, int vs)
         {
             this.hs = hs/ (2 * HS);
             this.vs = vs/ (2 * VS);
         }
+
         public void ScaleUpdate(double HS, double VS)
         {
             this.HS = HS;
             this.VS = VS;
         }
+
         public void TransformCenter(int cx, int cy)
         {
             this.cx += cx;

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-
-namespace GraphicVisualisator
+﻿namespace GraphicVisualisator
 {
     public class GraphicMath
     {
@@ -18,6 +10,7 @@ namespace GraphicVisualisator
 
             return y;
         }
+
         public static double Power(double x, int s)
         {
             double y = 1;
@@ -26,6 +19,7 @@ namespace GraphicVisualisator
             if (s == 0) y = 1;
             return y;
         }
+
         public static double Sin(double x)
         {
             int step = 10;
@@ -46,6 +40,7 @@ namespace GraphicVisualisator
 
             return y;
         }
+
         public static double Cos(double x)
         {
 
@@ -67,6 +62,7 @@ namespace GraphicVisualisator
 
             return y;
         }
+
         public static int Sqrt(double x, int step)
         {
             double y = 0;
