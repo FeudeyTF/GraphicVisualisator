@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-
-namespace WindowsFormsApplication10
+﻿namespace GraphicVisualisator
 {
     static class Program
     {
@@ -15,7 +10,7 @@ namespace WindowsFormsApplication10
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new MainPage());
         }
     }
 }

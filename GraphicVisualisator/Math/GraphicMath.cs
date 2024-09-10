@@ -24,11 +24,11 @@
         {
             int step = 10;
             if (x > 0)
-                while (x >= Math.PI)
-                    x -= 2 * Math.PI;
+                while (x >= System.Math.PI)
+                    x -= 2 * System.Math.PI;
             else
-                while (x < -Math.PI)
-                    x += 2 * Math.PI;
+                while (x < -System.Math.PI)
+                    x += 2 * System.Math.PI;
 
             double y = 0;
             int k = 1;
@@ -46,11 +46,11 @@
 
             int step = 10;
             if (x > 0)
-                while (x >= Math.PI )
-                    x -= 2 * Math.PI;
+                while (x >= System.Math.PI )
+                    x -= 2 * System.Math.PI;
             else
-                while (x < -Math.PI)
-                    x += 2 * Math.PI;
+                while (x < -System.Math.PI)
+                    x += 2 * System.Math.PI;
 
             double y = 0;
             int k = 1;
@@ -63,9 +63,8 @@
             return y;
         }
 
-        public static int Sqrt(double x, int step)
+        public static int Sqrt(double x)
         {
-            double y = 0;
             int sqr = 1;
             for (int i = 0; i < (int)x; i++)
                 for (int j = 0; j < i; j++)
@@ -74,7 +73,6 @@
                         sqr = j;
                         break;
                     }
-
             return sqr;
         }
     }

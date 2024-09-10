@@ -1,175 +1,141 @@
-﻿using GraphicVisualisator;
-using System.Text;
+﻿using GraphicVisualisator.Math;
 
-namespace WindowsFormsApplication10.MathAnalysis
+namespace GraphicVisualisator
 {
+    public delegate double Function(double x);
+
     public class GraphicManager
     {
         public Pen GraphicPen { get; }
 
         public Brush GraphicBrush { get; }
 
-        private double Height, Width;
+        private readonly int Height, Width;
 
-        private double HS, VS; 
+        private double OrdinateScale, AbscissaScale; // Y and X axes scales
 
-        public double hs, vs;
+        public double HeightScale, WidthScale;
 
-        private int cx, cy;
+        private Point Center;
 
-        public delegate double Function(double x);
-
-        public delegate double PolarFunction(double x);
-
-        public delegate double ParametricFunction(double x);
-
-
-        public GraphicManager(Pen graphicPen, Brush graphicBrush, double HS, double VS, int Height, int Width)
+        public GraphicManager(Pen pen, Brush brush, double ordinateScale, double abscissaScale, int height, int width)
         {
-            GraphicPen = graphicPen;
-            GraphicBrush = graphicBrush;
-            this.HS = HS; this.VS = VS;
-            this.cx = Width / 2; this.cy = Height / 2;
-            this.Height = Height; this.Width = Width;
-           
-
+            Height = height;
+            Width = width;
+            GraphicPen = pen;
+            GraphicBrush = brush;
+            OrdinateScale = ordinateScale;
+            AbscissaScale = abscissaScale;
+            Center = new(Width / 2, Height / 2);
         }
 
         public void CreateGraphic(Graphics graphics)
         {
             // Рисуем оси координат
-            Graphics g = graphics;
-            g.TranslateTransform(cx, cy);
-            Pen AxisPen = new Pen(GraphicBrush, 3);
-            Font fn = new Font("Arial", (int)hs/3);
-            StringFormat sf = new StringFormat();
-            sf.Alignment = StringAlignment.Center;
+            graphics.TranslateTransform(Center.X, Center.Y);
+            Pen AxisPen = new(GraphicBrush, 3);
+            Font fn = new("Arial", (int)HeightScale / 3);
+            StringFormat sf = new()
+            {
+                Alignment = StringAlignment.Center
+            };
 
-            StringFormat sfv = new StringFormat();
-            sfv.Alignment = StringAlignment.Far;
-            sfv.LineAlignment = StringAlignment.Center;
+            StringFormat sfv = new()
+            {
+                Alignment = StringAlignment.Far,
+                LineAlignment = StringAlignment.Center
+            };
 
             // Горизонтальная ось
-            g.DrawLine(AxisPen, (float)(-Width / 2 * hs / 10), 0, (float)((Width / 2 - 2) * hs / 10), 0);
-            g.DrawLine(AxisPen, (float)((Width / 2 - 2) * hs / 10), 0, (float)((Width / 2 - 15) * hs / 10), 3);
-            g.DrawLine(AxisPen, (float)((Width / 2 - 2) * hs / 10), 0, (float)((Width / 2 - 15) * hs / 10), -3);
+            graphics.DrawLine(AxisPen, (float)(-Width / 2 * HeightScale / 10), 0, (float)((Width / 2 - 2) * HeightScale / 10), 0);
+            graphics.DrawLine(AxisPen, (float)((Width / 2 - 2) * HeightScale / 10), 0, (float)((Width / 2 - 15) * HeightScale / 10), 3);
+            graphics.DrawLine(AxisPen, (float)((Width / 2 - 2) * HeightScale / 10), 0, (float)((Width / 2 - 15) * HeightScale / 10), -3);
 
             // Вертикальная ось
-            g.DrawLine(AxisPen, 0, -(float)((Height / 2 - 2)*vs/10), 0, (float)((Height / 2 - 2) * vs / 10));
-            g.DrawLine(AxisPen, 0, -(float)((Height / 2 + 2) * vs / 10), 3, -(float)((Height / 2 - 15) * vs / 10));
-            g.DrawLine(AxisPen, 0, -(float)((Height / 2 + 2) * vs / 10), -3, -(float)((Height / 2 - 15) * vs / 10));
+            graphics.DrawLine(AxisPen, 0, -(float)((Height / 2 - 2) * WidthScale / 10), 0, (float)((Height / 2 - 2) * WidthScale / 10));
+            graphics.DrawLine(AxisPen, 0, -(float)((Height / 2 + 2) * WidthScale / 10), 3, -(float)((Height / 2 - 15) * WidthScale / 10));
+            graphics.DrawLine(AxisPen, 0, -(float)((Height / 2 + 2) * WidthScale / 10), -3, -(float)((Height / 2 - 15) * WidthScale / 10));
 
             // Разметка горизонтальной оси
             for (int i = 1; i < 30; i++)
             {
-                double t = HS / 10 * i;
-                int a, b;
-                Scale(t, 0, out a, out b);
-                g.DrawLine(AxisPen, a, b, a, b + 7);
-                t = Math.Round(t, 2);
+                double t = OrdinateScale / 10 * i;
+                GetScaledCoords(t, 0, out int a, out int b);
+                graphics.DrawLine(AxisPen, a, b, a, b + 7);
+                t = System.Math.Round(t, 2);
                 string s = t.ToString();
-                g.DrawString(s, fn, GraphicBrush, a, b + 7, sf);
-                g.DrawLine(AxisPen, -a, b, -a, b + 7);
+                graphics.DrawString(s, fn, GraphicBrush, a, b + 7, sf);
+                graphics.DrawLine(AxisPen, -a, b, -a, b + 7);
                 s = "-" + s;
-                g.DrawString(s, fn, GraphicBrush, -a, b + 7, sf);
+                graphics.DrawString(s, fn, GraphicBrush, -a, b + 7, sf);
             }
             // Разметка вертикальной оси
             for (int i = 1; i < 30; i++)
             {
-                double t = VS / 10 * i;
-                int a, b;
-                Scale(0, t, out a, out b);
-                g.DrawLine(AxisPen, a, b, a - 7, b);
-                t = Math.Round(t, 2);
+                double t = AbscissaScale / 10 * i;
+                GetScaledCoords(0, t, out int a, out int b);
+                graphics.DrawLine(AxisPen, a, b, a - 7, b);
+                t = System.Math.Round(t, 2);
                 string s = t.ToString();
-                g.DrawString(s, fn, GraphicBrush, a - 10, b, sfv);
-                g.DrawLine(AxisPen, a, -b, a - 7, -b);
+                graphics.DrawString(s, fn, GraphicBrush, a - 10, b, sfv);
+                graphics.DrawLine(AxisPen, a, -b, a - 7, -b);
                 s = "-" + s;
-                g.DrawString(s, fn, GraphicBrush, a - 10, -b, sfv);
+                graphics.DrawString(s, fn, GraphicBrush, a - 10, -b, sfv);
             }
-
         }
 
-        public void DrawGraphic(int num, Function f1, Graphics graphics, double step)
+        public void DrawGraphic(int num, Function f1, Graphics graphics, double step = Constants.GRAPHIC_STEP)
         {
             double minStep = step / 10;
-            try
+            for (double i = -num; i < num; i += step)
             {
+                if (System.Math.Abs(Derivative.FindTangent(i, i, f1, 0.000001f)) > 20)
+                    step = minStep;
+                if (System.Math.Abs(Derivative.FindTangent(i, i, f1, 0.000001f)) < 10)
+                    step = minStep * 10;
+                if (System.Math.Abs(Derivative.FindTangentX(i, f1, 0.000001f)) < 100 && f1(i) != 0)
+                    graphics.DrawLine(GraphicPen, (float)(i * HeightScale), -(float)(f1(i) * WidthScale), (float)((i + step) * HeightScale), -(float)(f1(i + step) * WidthScale));
 
-                for (double i = -num; i < num; i += step)
-                {
-                    if (Math.Abs(Derivative.FindTangent(i, i, f1, 0.000001)) > 20)
-                        step = minStep;
-                    if (Math.Abs(Derivative.FindTangent(i, i, f1, 0.000001)) < 10)
-                        step = minStep * 10;
-                    if (Math.Abs(Derivative.FindTangentX(i, f1, 0.000001)) < 100 && f1(i) != 0)
-                        graphics.DrawLine(GraphicPen, (float)(i * hs), -(float)(f1(i) * vs), (float)((i + step) * hs), -(float)(f1(i + step) * vs));
-                    
-                }
             }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-
         }
 
-        public void DrawExpressionGraphic(int  num, string expr, Graphics g, double step)
+        public void DrawExpressionGraphic(int num, string expr, Graphics g, double step = Constants.GRAPHIC_STEP)
         {
             try
             {
-                bool first = true;
-                int a1 = 0, b1 = 0;
-                int a = 0, b = 0;
-                for (double i = -num; i < num; i += step)
+                GetScaledCoords(-num, Parser.Parse(expr.Replace("x", (-num).ToString())), out int lastX, out int lastY);
+                for (double i = -num + step; i < num; i += step)
                 {
-                    StringBuilder str = new StringBuilder();
-                    for(int j = 0; j < expr.Length; j++)
-                    {
-                        if (expr[j]=='x')
-                        {
-                            str.Append(i);
-                            continue;
-                        }
-                        str.Append(expr[j]);
-                    }
-                    Scale(i, Parser.Parse(str.ToString()), out a1, out b1);
-                    if (first)
-                    {
-                        a = a1; b = b1;
-                        first = false;
-                        continue;
-                    }
-                        g.DrawLine(GraphicPen, a, b, a1, b1);
-                    a = a1; b = b1;
+                    GetScaledCoords(i, Parser.Parse(expr.Replace("x", i.ToString())), out int scaledX, out int scaledY);
+                    g.DrawLine(GraphicPen, lastX, lastY, scaledX, scaledY);
+                    lastX = scaledX; lastY = scaledY;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
-
         }
 
-        public void DrawPolarGraphic(double start, double end, PolarFunction f1, Graphics g, double step)
+        public void DrawPolarGraphic(double start, double end, Function polarFunction, Graphics g, double step = Constants.GRAPHIC_STEP)
         {
             try
             {
-                int a1 = 0, b1 = 0;
+                int scaledX = 0, scaledY = 0;
                 int a = 0, b = 0;
                 for (double phi = start; phi < end; phi += step)
                 {
                     // Функция
-             
-                    double r = f1(phi);
+
+                    double r = polarFunction(phi);
 
                     // Перевод в декартовы
-                    double x = r * Math.Cos(phi);
-                    double y = r * Math.Sin(phi);
+                    double x = r * System.Math.Cos(phi);
+                    double y = r * System.Math.Sin(phi);
 
-                    Scale(x, y, out a1, out b1);
+                    GetScaledCoords(x, y, out scaledX, out scaledY);
                     if (phi != 0)
-                        g.DrawLine(GraphicPen, a, b, a1, b1);
-                    a = a1; b = b1;
+                        g.DrawLine(GraphicPen, a, b, scaledX, scaledY);
+                    a = scaledX; b = scaledY;
 
 
                 }
@@ -181,55 +147,52 @@ namespace WindowsFormsApplication10.MathAnalysis
 
         }
 
-        public void DrawParametricGraphic(double start, double end, ParametricFunction f1, ParametricFunction f2, Graphics g, double step)
+        public void DrawParametricGraphic(double start, double end, Function xFunction, Function yFunction, Graphics g, double step = Constants.GRAPHIC_STEP)
         {
             try
             {
-                int a1=0, b1=0;
+                int a1 = 0, b1 = 0;
                 int a = 0, b = 0;
                 for (double i = start; i < end; i += step)
                 {
                     // Функция
-                    double x = f1(i);
-                    double y = f2(i);
+                    double x = xFunction(i);
+                    double y = yFunction(i);
 
-                    Scale(x, y, out a1, out b1);
+                    GetScaledCoords(x, y, out a1, out b1);
                     if (i != 0)
                         g.DrawLine(GraphicPen, a, b, a1, b1);
                     a = a1; b = b1;
-
-
                 }
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
-
         }
 
-        private void Scale(double x, double y, out int w, out int h)
+        private void GetScaledCoords(double x, double y, out int scaledX, out int scaledY)
         {
-            w = (int)Math.Round(x * hs);
-            h = -(int)Math.Round(y * vs);
+            scaledX = (int)System.Math.Round(x * HeightScale);
+            scaledY = -(int)System.Math.Round(y * WidthScale);
         }
 
-        public void Resize(int hs, int vs)
+        public void Resize(int heightScale, int widthScale)
         {
-            this.hs = hs/ (2 * HS);
-            this.vs = vs/ (2 * VS);
+            HeightScale = heightScale / (2 * OrdinateScale);
+            WidthScale = widthScale / (2 * AbscissaScale);
         }
 
-        public void ScaleUpdate(double HS, double VS)
+        public void ScaleUpdate(double heightScale, double widthScale)
         {
-            this.HS = HS;
-            this.VS = VS;
+            OrdinateScale = heightScale;
+            AbscissaScale = widthScale;
         }
 
-        public void TransformCenter(int cx, int cy)
+        public void TransformCenter(int x, int y)
         {
-            this.cx += cx;
-            this.cy += cy;
+            Center.X += x;
+            Center.Y += y;
         }
     }
 }

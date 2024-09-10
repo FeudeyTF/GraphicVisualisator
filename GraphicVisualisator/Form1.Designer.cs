@@ -1,6 +1,6 @@
-﻿namespace WindowsFormsApplication10
+﻿namespace GraphicVisualisator
 {
-    partial class Form1
+    partial class MainPage
     {
         /// <summary>
         /// Требуется переменная конструктора.

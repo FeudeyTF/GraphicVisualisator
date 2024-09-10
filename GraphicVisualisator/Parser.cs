@@ -2,72 +2,21 @@
 
 namespace GraphicVisualisator
 {
-    public class Stack<TValue>
-    {
-        private TValue[] StackArray;
-
-        private int Pointer = 0;
-
-        public Stack(int n)
-        {
-            StackArray = new TValue[n];
-        }
-
-        public bool Push(TValue value)
-        {
-            if (Pointer < StackArray.Length)
-            {
-                StackArray[Pointer++] = value;
-                return true;
-            }
-            else
-                return false;
-        }
-
-        public TValue Peek()
-        {
-            if (Pointer > 0)
-                return StackArray[Pointer - 1];
-            else
-                return default;
-        }
-
-        public TValue Pop()
-        {
-            if (Pointer > 0)
-                return StackArray[--Pointer];
-            else 
-                return default;
-        }
-
-        public int Number
-        {
-            get { return Pointer; }
-        }
-    }
-   
-
+    // Парсер польской записи
     public class Parser
     {
-        public static string[] PrefixFunctions = { "cos", "sin" };
+        public static readonly string[] PrefixFunctions = { "cos", "sin" };
 
         public static int GetPriority(string c)
         {
-            switch (c)
+            return c switch
             {
-                case "^":
-                    return 1;
-                case "*":
-                case "/":
-                    return 2;
-                case "+":
-                case "-":
-                    return 3;
-                case "(":
-                case ")":
-                    return 4;
-                default: return 0;
-            }
+                "^" => 1,
+                "*" or "/" => 2,
+                "+" or "-" => 3,
+                "(" or ")" => 4,
+                _ => 0,
+            };
         }
 
         public static string ExprBuilder(string expr)
@@ -111,7 +60,7 @@ namespace GraphicVisualisator
                     result += s + " ";
                 else
                 {
-                    if (PrefixFunctions.Contains(s) || s == "(" || stringStack.Number == 0)
+                    if (PrefixFunctions.Contains(s) || s == "(" || stringStack.Count == 0)
                     {
                         stringStack.Push(s);
                         continue;
@@ -137,20 +86,19 @@ namespace GraphicVisualisator
 
                 }
             }
-            while (stringStack.Number != 0)
+            while (stringStack.Count != 0)
                 result += stringStack.Pop() + " ";
 
             return result.Trim();
         }
         
-        public static double Parse(string expr)
+        public static double Parse(string expression)
         {
-            string[] splitExpr = Translate(expr).Split(' ');
-            Stack<double> doubleStack = new Stack<double>(expr.Length);
-            double x;
+            string[] splitExpr = Translate(expression).Split(' ');
+            Stack<double> doubleStack = new(expression.Length);
             foreach (string s in splitExpr)
             {
-                if (double.TryParse(s, out x))
+                if (double.TryParse(s, out double x))
                 {
                     doubleStack.Push(x);
                 }
@@ -171,10 +119,10 @@ namespace GraphicVisualisator
                             doubleStack.Push(doubleStack.Pop() * doubleStack.Pop());
                             break;
                         case "cos":
-                            doubleStack.Push(Math.Cos(doubleStack.Pop()));
+                            doubleStack.Push(System.Math.Cos(doubleStack.Pop()));
                             break;
                         case "sin":
-                            doubleStack.Push(Math.Sin(doubleStack.Pop()));
+                            doubleStack.Push(System.Math.Sin(doubleStack.Pop()));
                             break;
                     }
                 }
@@ -183,6 +131,3 @@ namespace GraphicVisualisator
         }
     }
 }
-
-
-
