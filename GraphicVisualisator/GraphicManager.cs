@@ -14,11 +14,11 @@ namespace GraphicVisualisator
 
         private double OrdinateScale, AbscissaScale; // Y and X axes scales
 
-        public double HeightScale, WidthScale;
+        public double HeightScale, WidthScale; // Zoom Scale
 
         private Point Center;
 
-        public GraphicManager(Pen pen, Brush brush, double ordinateScale, double abscissaScale, int height, int width)
+        public GraphicManager(Pen pen, Brush brush, int height, int width, double ordinateScale = Constants.DEFAULT_AXES_SCALE, double abscissaScale = Constants.DEFAULT_AXES_SCALE)
         {
             Height = height;
             Width = width;

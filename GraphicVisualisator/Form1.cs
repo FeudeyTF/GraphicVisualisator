@@ -26,7 +26,7 @@ namespace GraphicVisualisator
         {
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
-            GraphicManager = new GraphicManager(new Pen(Color.Red, 3), Brushes.Black, 10, 10, panel1.Height, panel1.Width);
+            GraphicManager = new GraphicManager(new Pen(Color.Red, 3), Brushes.Black, panel1.Height, panel1.Width);
             GraphicManager.Resize(panel1.Width, panel1.Height);
             LastMousePosition = new();
             MouseWheel += HandleMouseWheel;
