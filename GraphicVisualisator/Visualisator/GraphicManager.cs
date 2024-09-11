@@ -6,6 +6,8 @@ namespace GraphicVisualisator.Visualisator
 
     public class GraphicManager
     {
+        public const double DEFAULT_SCALE_RESIZE = 1.1;
+
         public readonly Panel GraphicPanel;
 
         public readonly Pen GraphicPen;
@@ -84,13 +86,13 @@ namespace GraphicVisualisator.Visualisator
         {
             if (args.Delta > 0)
             {
-                HeightScale *= 1.1;
-                WidthScale *= 1.1;
+                HeightScale *= DEFAULT_SCALE_RESIZE;
+                WidthScale *= DEFAULT_SCALE_RESIZE;
             }
             else
             {
-                HeightScale /= 1.1;
-                WidthScale /= 1.1;
+                HeightScale /= DEFAULT_SCALE_RESIZE;
+                WidthScale /= DEFAULT_SCALE_RESIZE;
             }
             GraphicPanel.Invalidate();
         }
