@@ -1,14 +1,16 @@
 ﻿using GraphicVisualisator.Math;
 
-namespace GraphicVisualisator
+namespace GraphicVisualisator.Visualisator
 {
     public delegate double Function(double x);
 
     public class GraphicManager
     {
-        public Pen GraphicPen { get; }
+        public readonly Panel GraphicPanel;
 
-        public Brush GraphicBrush { get; }
+        public readonly Pen GraphicPen;
+
+        public readonly Brush GraphicBrush;
 
         private readonly int Height, Width;
 
@@ -18,8 +20,13 @@ namespace GraphicVisualisator
 
         private Point Center;
 
-        public GraphicManager(Pen pen, Brush brush, int height, int width, double ordinateScale = Constants.DEFAULT_AXES_SCALE, double abscissaScale = Constants.DEFAULT_AXES_SCALE)
+        private bool IsMouseDown = false;
+
+        private Point LastMousePosition;
+
+        public GraphicManager(Panel graphicPanel, Pen pen, Brush brush, int height, int width, double ordinateScale = Constants.DEFAULT_AXES_SCALE, double abscissaScale = Constants.DEFAULT_AXES_SCALE)
         {
+            GraphicPanel = graphicPanel;
             Height = height;
             Width = width;
             GraphicPen = pen;
@@ -27,6 +34,65 @@ namespace GraphicVisualisator
             OrdinateScale = ordinateScale;
             AbscissaScale = abscissaScale;
             Center = new(Width / 2, Height / 2);
+
+            LastMousePosition = new();
+
+            GraphicPanel.Paint += HandelPaint;
+
+            GraphicPanel.MouseWheel += HandleMouseWheel;
+            GraphicPanel.MouseUp += HandleMouseUp;
+            GraphicPanel.MouseDown += HandleMouseDown;
+            GraphicPanel.MouseMove += HandleMouseMove;
+        }
+
+        private void HandelPaint(object? sender, PaintEventArgs args)
+        {
+            CreateGraphic(args.Graphics);
+            DrawGraphic(new Graphic(GraphicMath.Cos), new GraphicParameters(-30, 30), args.Graphics);
+            //new Derivative(GraphicMath.Cos).DrawTangent(0, -30, 30, args.Graphics, this, new Pen(Color.Green, 3));
+        }
+
+        private void HandleMouseMove(object? sender, MouseEventArgs args)
+        { 
+            if (IsMouseDown)
+            {
+                TransformCenter(args.X - LastMousePosition.X, args.Y - LastMousePosition.Y);
+                LastMousePosition.X = args.X;
+                LastMousePosition.Y = args.Y;
+                GraphicPanel.Invalidate();
+            }
+        }
+
+        private void HandleMouseDown(object? sender, MouseEventArgs args)
+        {
+            IsMouseDown = true;
+            LastMousePosition.X = args.X;
+            LastMousePosition.Y = args.Y;
+            if(Program.MainPage != null)
+                Program.MainPage.Cursor = Cursors.SizeAll;
+        }
+
+        private void HandleMouseUp(object? sender, MouseEventArgs args)
+        {
+            IsMouseDown = false;
+            if(Program.MainPage != null)
+                Program.MainPage.Cursor = Cursors.Default;
+            GraphicPanel.Invalidate();
+        }
+
+        private void HandleMouseWheel(object? sender, MouseEventArgs args)
+        {
+            if (args.Delta > 0)
+            {
+                HeightScale *= 1.1;
+                WidthScale *= 1.1;
+            }
+            else
+            {
+                HeightScale /= 1.1;
+                WidthScale /= 1.1;
+            }
+            GraphicPanel.Invalidate();
         }
 
         public void CreateGraphic(Graphics graphics)
@@ -168,6 +234,20 @@ namespace GraphicVisualisator
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+            }
+        }
+
+        public void DrawGraphic(Graphic graphic, GraphicParameters parameters, Graphics graphics)
+        {
+            double minStep = parameters.Step / 10;
+            for (double i = parameters.StartX; i < parameters.EndX; i += parameters.Step)
+            {
+                if (System.Math.Abs(Derivative.FindTangent(i, i, graphic.GraphicFunction, 0.000001f)) > 20)
+                    parameters.Step = minStep;
+                if (System.Math.Abs(Derivative.FindTangent(i, i, graphic.GraphicFunction, 0.000001f)) < 10)
+                    parameters.Step = minStep * 10;
+                if (System.Math.Abs(Derivative.FindTangentX(i, graphic.GraphicFunction, 0.000001f)) < 100 && graphic.GraphicFunction(i) != 0)
+                    graphics.DrawLine(GraphicPen, (float)(i * HeightScale), -(float)(graphic.GraphicFunction(i) * WidthScale), (float)((i + parameters.Step) * HeightScale), -(float)(graphic.GraphicFunction(i + parameters.Step) * WidthScale));
             }
         }
 

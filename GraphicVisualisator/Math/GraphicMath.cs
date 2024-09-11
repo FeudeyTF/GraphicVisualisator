@@ -1,6 +1,6 @@
 ﻿namespace GraphicVisualisator
 {
-    public class GraphicMath
+    public static class GraphicMath
     {
         public static int Factorial(int x)
         {

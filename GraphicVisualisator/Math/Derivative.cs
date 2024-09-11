@@ -1,4 +1,6 @@
-﻿namespace GraphicVisualisator.Math
+﻿using GraphicVisualisator.Visualisator;
+
+namespace GraphicVisualisator.Math
 {
     // Derivative - Производная, Tangent - Касательная
     public class Derivative

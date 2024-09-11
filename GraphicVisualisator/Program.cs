@@ -2,6 +2,12 @@
 {
     static class Program
     {
+        public static MainPage? MainPage;
+
+        static Program()
+        {
+        }
+
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
@@ -10,7 +16,8 @@
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainPage());
+            MainPage = new();
+            Application.Run(MainPage);
         }
     }
 }
