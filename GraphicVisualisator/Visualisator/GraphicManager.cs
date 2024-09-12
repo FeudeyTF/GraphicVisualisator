@@ -1,4 +1,5 @@
 ﻿using GraphicVisualisator.Math;
+using GraphicVisualisator.Visualisator.Graphs;
 
 namespace GraphicVisualisator.Visualisator
 {
@@ -26,6 +27,12 @@ namespace GraphicVisualisator.Visualisator
 
         private Point LastMousePosition;
 
+        private DateTime LastMove = DateTime.Now;
+
+        private double GraphMoveDelay = 0.05;
+
+        List<List<PointF>> Graphs = new();
+
         public GraphicManager(Panel graphicPanel, Pen pen, Brush brush, int height, int width, double ordinateScale = Constants.DEFAULT_AXES_SCALE, double abscissaScale = Constants.DEFAULT_AXES_SCALE)
         {
             GraphicPanel = graphicPanel;
@@ -45,22 +52,25 @@ namespace GraphicVisualisator.Visualisator
             GraphicPanel.MouseUp += HandleMouseUp;
             GraphicPanel.MouseDown += HandleMouseDown;
             GraphicPanel.MouseMove += HandleMouseMove;
+
+            Graphs.Add(new Graph(GraphicMath.Cos).GetPoints(-30, 30).ToList());
         }
 
         private void HandelPaint(object? sender, PaintEventArgs args)
         {
-            CreateGraphic(args.Graphics);
-            DrawGraphic(new Graphic(GraphicMath.Cos), new GraphicParameters(-30, 30), args.Graphics);
-            //new Derivative(GraphicMath.Cos).DrawTangent(0, -30, 30, args.Graphics, this, new Pen(Color.Green, 3));
+            CreateGraphZone(args.Graphics);
+            foreach(var graph in Graphs)
+                DrawGraphic(graph, new GraphicParameters(-30, 30), args.Graphics);
         }
 
         private void HandleMouseMove(object? sender, MouseEventArgs args)
         { 
-            if (IsMouseDown)
+            if (IsMouseDown && (DateTime.Now - LastMove).TotalSeconds >= GraphMoveDelay)
             {
                 TransformCenter(args.X - LastMousePosition.X, args.Y - LastMousePosition.Y);
                 LastMousePosition.X = args.X;
                 LastMousePosition.Y = args.Y;
+                LastMove = DateTime.Now;
                 GraphicPanel.Invalidate();
             }
         }
@@ -97,7 +107,7 @@ namespace GraphicVisualisator.Visualisator
             GraphicPanel.Invalidate();
         }
 
-        public void CreateGraphic(Graphics graphics)
+        public void CreateGraphZone(Graphics graphics)
         {
             // Рисуем оси координат
             graphics.TranslateTransform(Center.X, Center.Y);
@@ -152,104 +162,13 @@ namespace GraphicVisualisator.Visualisator
             }
         }
 
-        public void DrawGraphic(int num, Function f1, Graphics graphics, double step = Constants.GRAPHIC_STEP)
+        public void DrawGraphic(List<PointF> points, GraphicParameters parameters, Graphics graphics)
         {
-            double minStep = step / 10;
-            for (double i = -num; i < num; i += step)
+            for(int i = 1; i < points.Count; i++)
             {
-                if (System.Math.Abs(Derivative.FindTangent(i, i, f1, 0.000001f)) > 20)
-                    step = minStep;
-                if (System.Math.Abs(Derivative.FindTangent(i, i, f1, 0.000001f)) < 10)
-                    step = minStep * 10;
-                if (System.Math.Abs(Derivative.FindTangentX(i, f1, 0.000001f)) < 100 && f1(i) != 0)
-                    graphics.DrawLine(GraphicPen, (float)(i * HeightScale), -(float)(f1(i) * WidthScale), (float)((i + step) * HeightScale), -(float)(f1(i + step) * WidthScale));
-
-            }
-        }
-
-        public void DrawExpressionGraphic(int num, string expr, Graphics g, double step = Constants.GRAPHIC_STEP)
-        {
-            try
-            {
-                GetScaledCoords(-num, Parser.Parse(expr.Replace("x", (-num).ToString())), out int lastX, out int lastY);
-                for (double i = -num + step; i < num; i += step)
-                {
-                    GetScaledCoords(i, Parser.Parse(expr.Replace("x", i.ToString())), out int scaledX, out int scaledY);
-                    g.DrawLine(GraphicPen, lastX, lastY, scaledX, scaledY);
-                    lastX = scaledX; lastY = scaledY;
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        public void DrawPolarGraphic(double start, double end, Function polarFunction, Graphics g, double step = Constants.GRAPHIC_STEP)
-        {
-            try
-            {
-                int scaledX = 0, scaledY = 0;
-                int a = 0, b = 0;
-                for (double phi = start; phi < end; phi += step)
-                {
-                    // Функция
-
-                    double r = polarFunction(phi);
-
-                    // Перевод в декартовы
-                    double x = r * System.Math.Cos(phi);
-                    double y = r * System.Math.Sin(phi);
-
-                    GetScaledCoords(x, y, out scaledX, out scaledY);
-                    if (phi != 0)
-                        g.DrawLine(GraphicPen, a, b, scaledX, scaledY);
-                    a = scaledX; b = scaledY;
-
-
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-
-        }
-
-        public void DrawParametricGraphic(double start, double end, Function xFunction, Function yFunction, Graphics g, double step = Constants.GRAPHIC_STEP)
-        {
-            try
-            {
-                int a1 = 0, b1 = 0;
-                int a = 0, b = 0;
-                for (double i = start; i < end; i += step)
-                {
-                    // Функция
-                    double x = xFunction(i);
-                    double y = yFunction(i);
-
-                    GetScaledCoords(x, y, out a1, out b1);
-                    if (i != 0)
-                        g.DrawLine(GraphicPen, a, b, a1, b1);
-                    a = a1; b = b1;
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
-        public void DrawGraphic(Graphic graphic, GraphicParameters parameters, Graphics graphics)
-        {
-            double minStep = parameters.Step / 10;
-            for (double i = parameters.StartX; i < parameters.EndX; i += parameters.Step)
-            {
-                if (System.Math.Abs(Derivative.FindTangent(i, i, graphic.GraphicFunction, 0.000001f)) > 20)
-                    parameters.Step = minStep;
-                if (System.Math.Abs(Derivative.FindTangent(i, i, graphic.GraphicFunction, 0.000001f)) < 10)
-                    parameters.Step = minStep * 10;
-                if (System.Math.Abs(Derivative.FindTangentX(i, graphic.GraphicFunction, 0.000001f)) < 100 && graphic.GraphicFunction(i) != 0)
-                    graphics.DrawLine(GraphicPen, (float)(i * HeightScale), -(float)(graphic.GraphicFunction(i) * WidthScale), (float)((i + parameters.Step) * HeightScale), -(float)(graphic.GraphicFunction(i + parameters.Step) * WidthScale));
+                var lastPoint = points[i - 1];
+                var currentPoint = points[i];
+                graphics.DrawLine(GraphicPen, (float)(lastPoint.X * HeightScale), -(float)(lastPoint.Y * WidthScale), (float)(currentPoint.X * HeightScale), -(float)(currentPoint.Y * WidthScale));
             }
         }
 
