@@ -1,4 +1,5 @@
 ﻿using GraphicVisualisator.Visualisator;
+using GraphicVisualisator.Visualisator.Graphs;
 
 namespace GraphicVisualisator
 {
@@ -14,7 +15,7 @@ namespace GraphicVisualisator
             }
         }
 
-        private readonly GraphicManager GraphicManager;
+        private readonly GraphManager GraphicManager;
 
         private string GraphicExpression = "";
 
@@ -22,7 +23,8 @@ namespace GraphicVisualisator
         {
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
-            GraphicManager = new GraphicManager(panel1, new Pen(Color.Red, 3), Brushes.Black, panel1.Height, panel1.Width);
+            GraphicManager = new GraphManager(panel1);
+            GraphicManager.AddGraph(new Graph(System.Math.Abs), Color.Yellow, new(-30, 30));
             GraphicManager.Resize(panel1.Width, panel1.Height);
             DoubleBuffered = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);

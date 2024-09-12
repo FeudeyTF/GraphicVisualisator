@@ -12,7 +12,7 @@ namespace GraphicVisualisator.Math
             ParentFunction = function;
         }
 
-        public void DrawTangent(double x, double startX, double endX, Graphics graphics, GraphicManager manager,  Pen drawingPen, double epsilon = Constants.EPSILON)
+        public void DrawTangent(double x, double startX, double endX, Graphics graphics, GraphManager manager,  Pen drawingPen, double epsilon = Constants.EPSILON)
         {
             double startY = -FindTangent(startX, x, ParentFunction, epsilon);
             double endY = -FindTangent(endX, x, ParentFunction, epsilon);
