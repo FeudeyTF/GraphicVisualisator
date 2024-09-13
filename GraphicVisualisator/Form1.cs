@@ -17,17 +17,17 @@ namespace GraphicVisualisator
 
         private readonly GraphManager GraphicManager;
 
-        private string GraphicExpression = "";
-
         public MainPage()
         {
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
-            GraphicManager = new GraphManager(panel1);
-            GraphicManager.AddGraph(new Graph(System.Math.Abs), Color.Yellow, new(-30, 30));
-            GraphicManager.Resize(panel1.Width, panel1.Height);
             DoubleBuffered = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            
+            GraphicManager = new GraphManager(panel1);
+            GraphicManager.AddGraph(new Graph(System.Math.Cos), Color.Green, new(-30, 30, 0.3));
+            GraphicManager.AddGraph(new Tangent(System.Math.Cos, 10), Color.Blue, new(-30, 30, 0.3));
+            GraphicManager.Resize(panel1.Width, panel1.Height);
         }
 
         #region Events
@@ -58,7 +58,6 @@ namespace GraphicVisualisator
 
         private void ExpressionBox_TextChanged(object sender, EventArgs args)
         {
-            GraphicExpression = ExpressionBox.Text;
             panel1.Invalidate();
         }
     }

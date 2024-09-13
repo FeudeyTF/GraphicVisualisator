@@ -5,24 +5,26 @@ namespace GraphicVisualisator.Math
     // Derivative - Производная, Tangent - Касательная
     public class Derivative
     {
-        private readonly Function ParentFunction;
-        
-        public Derivative(Function function)
+        public static void DrawTangent(Function function, double x, float startX, float endX, Graphics graphics, GraphManager manager,  Pen drawingPen, double epsilon = Constants.EPSILON)
         {
-            ParentFunction = function;
-        }
-
-        public void DrawTangent(double x, double startX, double endX, Graphics graphics, GraphManager manager,  Pen drawingPen, double epsilon = Constants.EPSILON)
-        {
-            double startY = -FindTangent(startX, x, ParentFunction, epsilon);
-            double endY = -FindTangent(endX, x, ParentFunction, epsilon);
+            var points = GetTangentPoints(function, x, startX, endX, epsilon);
             graphics.DrawLine(
                 drawingPen,
-                (float)(startX * manager.HeightScale),
-                (float)(startY * manager.WidthScale),
-                (float)(endX * manager.HeightScale),
-                (float)(endY * manager.WidthScale)
+                (float)(points[0].X * manager.HeightScale),
+                (float)(points[0].Y * manager.WidthScale),
+                (float)(points[1].X * manager.HeightScale),
+                (float)(points[1].Y * manager.WidthScale)
             );
+        }
+
+        public static List<PointF> GetTangentPoints(Function function, double x, float startX, float endX, double epsilon = Constants.EPSILON)
+        {
+            float startY = (float)-FindTangent(startX, x, function, epsilon);
+            float endY = (float)-FindTangent(endX, x, function, epsilon);
+            return new() {
+                new PointF(startX, -startY),
+                new PointF(endX, -endY)
+            };
         }
         
         public static double FindTangent(double x, double x0, Function function, double eps)

@@ -25,7 +25,7 @@ namespace GraphicVisualisator.Visualisator
 
         private DateTime LastMove = DateTime.Now;
 
-        private double GraphMoveDelay = 0.05;
+        private double GraphMoveDelay = 0.025;
 
         private readonly List<EvaluatedGraph> Graphs = new();
 
@@ -50,7 +50,7 @@ namespace GraphicVisualisator.Visualisator
         }
 
         public void AddGraph(IGraph graph, Color graphColor, GraphParameters parameters) =>
-            Graphs.Add(new(graphColor, graph.GetPoints(parameters.StartX, parameters.EndX, parameters.Step).ToList()));
+            Graphs.Add(new(graphColor, graph, parameters));
 
         private void HandelPaint(object? sender, PaintEventArgs args)
         {
@@ -199,10 +199,13 @@ namespace GraphicVisualisator.Visualisator
 
         public List<PointF> Points;
 
-        public EvaluatedGraph(Color color, List<PointF> points)
+        public IGraph BaseGraph;
+
+        public EvaluatedGraph(Color color, IGraph graph, GraphParameters parameters)
         {
             GraphColor = color;
-            Points = points;
+            BaseGraph = graph;
+            Points = graph.GetPoints(parameters).ToList();
         }
     }
 }

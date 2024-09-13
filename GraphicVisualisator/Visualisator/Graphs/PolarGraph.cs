@@ -13,14 +13,12 @@ namespace GraphicVisualisator.Visualisator.Graphs
             GraphicFunction = graphicFunction;
         }
 
-        public IEnumerable<PointF> GetPoints(double startX, double endX, double step = Constants.GRAPHIC_STEP)
+        public IEnumerable<PointF> GetPoints(GraphParameters parameters)
         {
-            for (double phi = startX; phi < endX; phi += step)
+            for (double phi = parameters.StartX; phi < parameters.EndX; phi += parameters.Step)
             {
                 // Функция
-
                 double r = GraphicFunction(phi);
-
                 // Перевод в декартовы
                 double x = r * System.Math.Cos(phi);
                 double y = r * System.Math.Sin(phi);

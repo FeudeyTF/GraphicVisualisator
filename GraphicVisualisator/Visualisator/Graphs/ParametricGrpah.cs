@@ -16,9 +16,9 @@ namespace GraphicVisualisator.Visualisator.Graphs
             AbscissaFunction = xFunction;
         }
 
-        public IEnumerable<PointF> GetPoints(double startX, double endX, double step = Constants.GRAPHIC_STEP)
+        public IEnumerable<PointF> GetPoints(GraphParameters parameters)
         {
-            for (double i = startX; i < endX; i += step)
+            for (double i = parameters.StartX; i < parameters.EndX; i += parameters.Step)
             {
                 double x = AbscissaFunction(i);
                 double y = OrdinateFunction(i);
